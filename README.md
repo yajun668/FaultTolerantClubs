@@ -1,7 +1,12 @@
 # fault-tolerant_s_club
 Implementation of formulations for fault-tolerant low-diameter clusters
 
-This code accompanies the paper "On fault-tolerant low-diameter clusters in graphs" and is written in C++. If you want to use or cite this code, please cite the paper: @article{Lu202fault-tolerent, title={On fault-tolerant low-diameter clusters in graphs}, author={Lu, Yajun and Salemi, Hosseinali and Balasundaram, Balabhaskar and Buchanan, Austin}, year={2021} }
+This code accompanies the paper "On fault-tolerant low-diameter clusters in graphs" and is written in C++. If you want to use or cite this code, please cite the paper: 
+@article{Lu202fault-tolerent, 
+title={On fault-tolerant low-diameter clusters in graphs}, 
+author={Lu, Yajun and Salemi, Hosseinali and Balasundaram, Balabhaskar and Buchanan, Austin}, 
+year={2021} 
+}
 
 Terms and Use:
 
