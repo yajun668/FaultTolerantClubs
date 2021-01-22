@@ -16,3 +16,9 @@ bin-release/
 # Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
 # should NOT be excluded as they contain compiler settings and other important
 # information for Eclipse / Flash Builder.
+h_hereditary_s_club/CMakeLists.txt
+*.graph
+r_robust_s_club/Makefile
+*.sbatch
+h_hereditary_s_club/Makefile
+r_robust_s_club/CMakeLists.txt
