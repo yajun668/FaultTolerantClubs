@@ -55,12 +55,13 @@ int main(int argc, const char * argv[]) {
         double MIPgap=0.0;
 
         inputG.KCore(inputG.param_r); //first preprocess graph using k-core
+        //obtain wall-time before calling RecursiveBlockDecom
+        chrono::duration<double>WallTime_span1 = chrono::duration_cast<std::chrono::duration<double> >(chrono_clock::now() - Walltime);
+        Sol.WallTime += WallTime_span1.count();
         new_model.RecursiveBlockDecom(inputG,Sol); // run Recursive block decomposition
         Sol.BestObj = Sol.currentBestSol.size();
-
-        //get Wall-clock time
-        chrono::duration<double>WallTime_time_span = chrono::duration_cast<std::chrono::duration<double> >(chrono_clock::now() - Walltime);
-        Sol.WallTime = WallTime_time_span.count();
+        
+        //print Pre-processing time and Wall-clock time
         cout<<"The preprocessing time and  Wall-clock time is: "<<Sol.preProcessTime<<"->"<<Sol.WallTime<<endl;
 
         // print the best solution:

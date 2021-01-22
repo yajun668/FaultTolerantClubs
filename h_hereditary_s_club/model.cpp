@@ -255,6 +255,7 @@ void LazyCut_hereditary3_4club::callback() {
 
 //Recursive Block Decomposition algorithm
 void Model::RecursiveBlockDecom(Graph &inputG, SolutionStats &Sol){
+    chrono_time_point Walltime2 = chrono_clock::now();
     inputG.FindBlock();//find all blocks
     vector<vector<long>> B = inputG.blockList;
     vector<long> blockSize;//Do Not sort blockSize
@@ -286,8 +287,13 @@ void Model::RecursiveBlockDecom(Graph &inputG, SolutionStats &Sol){
     }
 
     int numIteration = 1; // count the number of iterations
+    //obtain wall-time before while loop
+    chrono::duration<double>WallTime_span2 = chrono::duration_cast<std::chrono::duration<double> >(chrono_clock::now() - Walltime2);
+    Sol.WallTime += WallTime_span2.count();
+
     //Run the algo until block size<=Sol.BestObj
-    while (max_size>Sol.BestObj) {
+    while (max_size>Sol.BestObj && Sol.WallTime <=3600) {
+        chrono_time_point Walltime3 = chrono_clock::now();
         if (numIteration != 1) {
             //we skip this for numIteration = 1 because before the while-loop we already assigned values for the first iteration
             D = B[max_index];
@@ -334,6 +340,8 @@ void Model::RecursiveBlockDecom(Graph &inputG, SolutionStats &Sol){
         max_index = max_element(blockSize.begin(), blockSize.end()) - blockSize.begin();
         max_size = blockSize[max_index];
         numIteration++;
+        chrono::duration<double>WallTime_span3 = chrono::duration_cast<std::chrono::duration<double> >(chrono_clock::now() - Walltime3);
+        Sol.WallTime += WallTime_span3.count();
     }
 }
 
