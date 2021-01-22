@@ -5,7 +5,7 @@ This code accompanies the paper "On fault-tolerant low-diameter clusters in grap
 @article{Lu202fault-tolerent, 
 title={On fault-tolerant low-diameter clusters in graphs}, 
 author={Lu, Yajun and Salemi, Hosseinali and Balasundaram, Balabhaskar and Buchanan, Austin}, 
-year={2021} 
+year={2021}
 }
 
 Terms and Use:
