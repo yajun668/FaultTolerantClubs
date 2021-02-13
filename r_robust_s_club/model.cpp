@@ -9,7 +9,6 @@ Model::~Model(){
 //read a collection of graph files
 void Model::read_masterfile(string input_file){
     string filename;
-    double MaxTime;
     num_instances = 0;
     ifstream fin(input_file.c_str());
     while (fin>>filename) {
@@ -146,11 +145,11 @@ void LazyCut_robust3_4club::callback() {
             vector<bool> vars_at_one(nv,false);
             for(long c=0;c<nv; c++){
                 if(x[c] > 0.9) {
-                    sol_vertices.push_back(c); //store vertices selected in the solution
+                    sol_vertices.push_back(c); //store vertices selected in the integral solution
                     vars_at_one[c] = true;
                 }
                 else
-                    C_bar.push_back(c); //store vertices which are NOT in the solution
+                    C_bar.push_back(c); //store vertices which are NOT in the integral solution
             }
             bool is_robust_club = true;
             Graph g1 = inducedG.CreateInducedGraph(sol_vertices);
@@ -161,12 +160,10 @@ void LazyCut_robust3_4club::callback() {
             //calculate rho bounds
             vector<long> *rho2 = new vector<long>[n1];
             vector<long> *rho3_UB = new vector<long>[n1];
-            vector<long> *rho3_LB = new vector<long>[n1];
             vector<long> *rho4_UB = new vector<long>[n1];
 
             for (long t1=0; t1<n1; t1++) {
                 rho2[t1] = findRho2_i(t1, g1);
-                rho3_LB[t1] = findrho3LB(t1, rho2[t1], g1);
                 rho3_UB[t1] = findRho3_i_UB(t1, rho2[t1], g1);
                 if (g1.param_s == 4)
                     rho4_UB[t1] = findRho4_i_UB(t1, rho3_UB[t1], g1);
@@ -187,16 +184,23 @@ void LazyCut_robust3_4club::callback() {
                             rho4_UB[i1][j1] = rho4_UB[j1][i1];
                     }
 
-                    //if rho3 LB >=r, there is no need to call max flow algorithm to get exact rho values
-                    if (rho3_LB[i1][j1] >= g1.param_r)
-                        continue;
-
                     vector<long> minCut;
                     long maxNum = 0;
-                    if (inducedG.param_s==3)
+                    if (inducedG.param_s==3){
+                        if(rho3_UB[i1][j1] >= g1.param_r){
+                            long rho3LB_ij = findrho3LB_iToj(i1,j1,rho2[i1][j1],g1); //Only need to calculate rho3_LB when rhoUB >=r
+                            if (rho3LB_ij >= g1.param_r)
+                                continue; //if rho3 LB >=r, there is no need to calculate rho values exactly
+                        }
                         maxNum = findVB3FeasiblePaths(i1, j1, minCut,g1);
-                    else if (inducedG.param_s == 4)
+                    } else if (inducedG.param_s == 4){
+                        if(rho4_UB[i1][j1] >= g1.param_r){
+                           long rho3LB_ij = findrho3LB_iToj(i1,j1,rho2[i1][j1],g1); //Only need to calculate rho3_LB when rhoUB >=r
+                           if (rho3LB_ij >= g1.param_r)
+                               continue; //if rho3 LB >=r, there is no need to calculate rho values exactly
+                        }
                         maxNum = findVB4FeasiblePaths(i1, j1, minCut,g1);
+                    }
 
                     //if rho(i1,j1) <= r-1, then g1 is not an r-robust s-club and we need to add a violated cut
                     if (maxNum<=g1.param_r-1) {
@@ -238,12 +242,10 @@ void LazyCut_robust3_4club::callback() {
             for(int i=0;i<n1;i++){
                 rho2[i].clear();
                 rho3_UB[i].clear();
-                rho3_LB[i].clear();
                 rho4_UB[i].clear();
             }
             delete[]rho2;
             delete[]rho3_UB;
-            delete[]rho3_LB;
             delete[]rho4_UB;
 
         }//end if Is MIP Sol

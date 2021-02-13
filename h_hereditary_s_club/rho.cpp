@@ -62,44 +62,55 @@ vector<long> findRho4_i_UB(long i, const vector<long> & rho3_i_UB, Graph & input
     return rho4_i_bound;
 }
 
+// find lower bound of rho3 from i to j: implement algo 4 in the paper
+long findrho3LB_iToj(long i, long j,const long & rho2_ij, Graph & input_graph){
+    //MUST Obtain rho2 before call this function
+    long rho3LB_ij = 0;
+    if (input_graph.degree[i]<=input_graph.param_r-1)
+        return rho3LB_ij;
+
+    rho3LB_ij += rho2_ij;
+    //if rho3LB >=r, no need to continue to calculate.
+    if (rho3LB_ij >= input_graph.param_r)
+        return rho3LB_ij;
+    vector<bool> visited = vector<bool> (input_graph.nverts, false);
+    //Mark true for vertices i,j, and common neighbors of i and j.
+    findCommonV(input_graph.AdjList[i],input_graph.AdjList[j],visited);
+    visited[i] = true;
+    visited[j] = true;
+    vector<bool> is_j_Nbr = vector<bool> (input_graph.nverts, false); //to identify neighbors of j
+    //Mark true for all neighbors of j
+    for(long t=0; t<input_graph.degree[j]; t++)
+        is_j_Nbr[input_graph.AdjList[j][t]] = true;
+
+    //screen Adj[i]
+    long p = -1, q = -1;
+    for(long m1 =0; m1<input_graph.degree[i];m1++){
+        if (rho3LB_ij >= input_graph.param_r)
+            return rho3LB_ij;
+        p = input_graph.AdjList[i][m1];
+        if (!visited[p]){
+            for(long m2 =0; m2<input_graph.degree[p];m2++){
+                q = input_graph.AdjList[p][m2];
+                if (!visited[q] && is_j_Nbr[q]){
+                    rho3LB_ij++;
+                    visited[p] = true;
+                    visited[q] = true;
+                    break;
+                }
+            }
+        }
+    }
+
+    return rho3LB_ij;
+}
+
 // find lower bound of rho3 from i to all other vertices: implement algo 4 in the paper
 vector<long> findrho3LB(long i, const vector<long> & rho2_i, Graph & input_graph){
     //MUST Obtain rho2 before call this function
     vector<long> rho3LB_i = vector<long>(input_graph.nverts,0);
     for(long j=0;j<input_graph.nverts;j++){
-        if(j==i)
-            continue;
-        rho3LB_i[j] += rho2_i[j];
-        //if rho3LB >=r, no need to continue to calculate.
-        if (rho3LB_i[j] >= input_graph.param_r)
-            continue;
-        vector<bool> visited = vector<bool> (input_graph.nverts, false);
-        //Mark true for vertices i,j, and common neighbors of i and j.
-        findCommonV(input_graph.AdjList[i],input_graph.AdjList[j],visited);
-        visited[i] = true;
-        visited[j] = true;
-        vector<bool> is_j_Nbr = vector<bool> (input_graph.nverts, false); //to identify neighbors of j
-        //Mark true for all neighbors of j
-        for(long t=0; t<input_graph.degree[j]; t++)
-            is_j_Nbr[input_graph.AdjList[j][t]] = true;
-
-        //screen Adj[i]
-        for(long m1 =0; m1<input_graph.degree[i];m1++){
-            if (rho3LB_i[j] >= input_graph.param_r)
-                break;
-            long p = input_graph.AdjList[i][m1];
-            if (!visited[p]){
-                for(long m2 =0; m2<input_graph.degree[p];m2++){
-                    long q = input_graph.AdjList[p][m2];
-                    if (!visited[q] && is_j_Nbr[q]){
-                        rho3LB_i[j]++;
-                        visited[p] = true;
-                        visited[q] = true;
-                        break;
-                    }
-                }
-            }
-        }
+        rho3LB_i[j] = findrho3LB_iToj(i,j,rho2_i[j],input_graph);
     }
     return rho3LB_i;
 }
@@ -112,7 +123,6 @@ void FindVBPathsByRhoUBLB_Hereditary(Graph & input_graph){
     //calculate rho_bar
     vector<long> *rho2 = new vector<long>[input_graph.nverts];
     vector<long> *rho3_UB = new vector<long>[input_graph.nverts];
-    vector<long> *rho3_LB = new vector<long>[input_graph.nverts];
     vector<long> *rho4_UB = new vector<long>[input_graph.nverts];
 
     #pragma omp parallel for  //parallel computing using OpenMP
@@ -122,7 +132,6 @@ void FindVBPathsByRhoUBLB_Hereditary(Graph & input_graph){
             input_graph.num_VB_paths[t1]=rho2[t1];
             continue;
         }
-        rho3_LB[t1] = findrho3LB(t1,rho2[t1],input_graph);
         rho3_UB[t1] = findRho3_i_UB(t1, rho2[t1],input_graph);
         //We only need to calculate rho4_UB if s==4
         if (input_graph.param_s==4)
@@ -146,7 +155,9 @@ void FindVBPathsByRhoUBLB_Hereditary(Graph & input_graph){
                         input_graph.num_VB_paths[i][j] = 0;
                         input_graph.num_VB_paths[j][i] = 0;
                     }else{
-                        if ((rho3_LB[i][j]>=input_graph.param_r)){
+                        //Only need to calculate rho3_LB when rho3UB >=r
+                        long rho3LB_ij = findrho3LB_iToj(i,j,rho2[i][j],input_graph);
+                        if (rho3LB_ij>=input_graph.param_r){
                             input_graph.num_VB_paths[i][j] = rho3_UB[i][j];
                             input_graph.num_VB_paths[j][i] = rho3_UB[i][j];
                             continue;
@@ -177,7 +188,9 @@ void FindVBPathsByRhoUBLB_Hereditary(Graph & input_graph){
                         input_graph.num_VB_paths[i][j] = 0;
                         input_graph.num_VB_paths[j][i] = 0;
                     }else{
-                        if ((rho3_LB[i][j]>=input_graph.param_r)){
+                        //Only need to calculate rho4_LB when rho3UB >=r
+                        long rho3LB_ij = findrho3LB_iToj(i,j,rho2[i][j],input_graph);
+                        if (rho3LB_ij>=input_graph.param_r){
                             input_graph.num_VB_paths[i][j] = rho4_UB[i][j];
                             input_graph.num_VB_paths[j][i] = rho4_UB[i][j];
                             continue;
@@ -196,12 +209,10 @@ void FindVBPathsByRhoUBLB_Hereditary(Graph & input_graph){
     for(int i=0;i<input_graph.nverts;i++){
         rho2[i].clear();
         rho3_UB[i].clear();
-        rho3_LB[i].clear();
         rho4_UB[i].clear();
     }
     delete[]rho2;
     delete[]rho3_UB;
-    delete[]rho3_LB;
     delete[]rho4_UB;
 }
 

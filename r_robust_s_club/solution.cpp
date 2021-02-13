@@ -56,14 +56,12 @@ bool IsrRobust_sClub(vector<long> &tau, Graph & input_graph){
     //calculate rho_bar
     vector<long> *rho2 = new vector<long>[input_graph.nverts];
     vector<long> *rho3_UB = new vector<long>[input_graph.nverts];
-    vector<long> *rho3_LB = new vector<long>[input_graph.nverts];
     vector<long> *rho4_UB = new vector<long>[input_graph.nverts];
     #pragma omp parallel for //parallel computing using OpenMP
     for (long t1=0; t1<input_graph.nverts; t1++) {
         rho2[t1] = findRho2_i(t1,input_graph);
         if (input_graph.param_s==2)
             input_graph.num_VB_paths[t1]=rho2[t1];
-        rho3_LB[t1] = findrho3LB(t1,rho2[t1],input_graph);
         rho3_UB[t1] = findRho3_i_UB(t1, rho2[t1],input_graph);
         //We only need to calculate rho4_UB if s==4
         if (input_graph.param_s==4)
@@ -98,7 +96,9 @@ bool IsrRobust_sClub(vector<long> &tau, Graph & input_graph){
                         tau[i] += 1;
                         tau[j] += 1;
                     }else{
-                        if ((rho3_LB[i][j]>=input_graph.param_r)){
+                        //Only need to calculate rho3_LB when rho3UB >=r
+                        long rho3LB_ij = findrho3LB_iToj(i,j,rho2[i][j],input_graph);
+                        if (rho3LB_ij>=input_graph.param_r){
                             input_graph.num_VB_paths[i][j] = rho3_UB[i][j];
                             input_graph.num_VB_paths[j][i] = rho3_UB[i][j];
                             continue;
@@ -135,7 +135,9 @@ bool IsrRobust_sClub(vector<long> &tau, Graph & input_graph){
                         tau[i] += 1;
                         tau[j] += 1;
                     }else{
-                        if ((rho3_LB[i][j]>=input_graph.param_r)){
+                        //Only need to calculate rho4_LB when rho3UB >=r
+                        long rho3LB_ij = findrho3LB_iToj(i,j,rho2[i][j],input_graph);
+                        if (rho3LB_ij>=input_graph.param_r){
                             input_graph.num_VB_paths[i][j] = rho4_UB[i][j];
                             input_graph.num_VB_paths[j][i] = rho4_UB[i][j];
                             continue;
@@ -159,12 +161,10 @@ bool IsrRobust_sClub(vector<long> &tau, Graph & input_graph){
     for(int i=0;i<input_graph.nverts;i++){
         rho2[i].clear();
         rho3_UB[i].clear();
-        rho3_LB[i].clear();
         rho4_UB[i].clear();
     }
     delete[]rho2;
     delete[]rho3_UB;
-    delete[]rho3_LB;
     delete[]rho4_UB;
 
     return isRobust;
