@@ -35,7 +35,8 @@ int main(int argc, const char * argv[]) {
         inputG.param_s = parameters[1];
         cout<< "Attempting to read DIMACS10 clustering format instance ...\n";
         inputG.ReadDIMACS10cluster();//read graph file
-
+        fout<<inputG.graphname<<","<< inputG.nverts<<","<<inputG.nedges<<",";
+        
         //Wal-clock time starts
         chrono_time_point Walltime = chrono_clock::now();
         //All results are saved in Sol; Initialization
@@ -74,7 +75,6 @@ int main(int argc, const char * argv[]) {
         if( (Sol.UpperBound > -1) && (Sol.BestObj >= 1) )
             MIPgap = 100*(Sol.UpperBound-Sol.BestObj)/Sol.BestObj;
         //save results in the csv file
-        fout<<inputG.graphname<<","<< inputG.nverts<<","<<inputG.nedges<<",";
         fout<<inputG.param_r<<","<< inputG.param_s<<","<<Sol.preProcessTime<<","<<Sol.BuildTime<< ",";
         fout<<Sol.SolHeuTime<< ","<<Sol.grbSolveTime<< ","<<Sol.WallTime<< ",";
         fout<<Sol.heuristic_size<<","<< Sol.BestObj<<","<<Sol.UpperBound<<","<<MIPgap<<",";
