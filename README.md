@@ -1,14 +1,30 @@
-# fault-tolerant_s_club
-Implementation of formulations for fault-tolerant low-diameter clusters
+# Code for Finding Fault-tolerant s-Clubs
 
-This code accompanies the paper "On fault-tolerant low-diameter clusters in graphs" and is written in C++. If you want to use or cite this code, please cite the paper: 
+
+This code accompanies the paper "On fault-tolerant low-diameter clusters in graphs" and is written in C++. If you wish to use or cite this code, please cite the paper: 
 
     @article{LSBB2021fault-tolerent, 
       title={On fault-tolerant low-diameter clusters in graphs}, 
       author={Lu, Yajun and Salemi, Hosseinali and Balasundaram, Balabhaskar and Buchanan, Austin}, 
       year={2021}}
 
-Terms and Use:
+This repository includes two folders:
+1. r_robust_s_club: used to find r-robust s-clubs
+2. h_hereditary_s_club: used to find h-hereditary s-clubs
+
+## Compiling the code
+The following steps show how to compile and run the code to find r-robust s-clubs in a Linux environment using a makefile (you can also run the code in Mac or Windows environment by configuring your IDE appropriately). In the folder of r_robust_s_club, parameter.txt is used to configure parameters r and s, and the "data" folder includes InputFile.txt (used to determine which instances you want to test) and 10th DIMACS graph instances (you can also downlaod these instances from the website: https://www.cc.gatech.edu/dimacs10/archive/clustering.shtml). It is similar to run the code to find h-hereditary s-clubs.
+
+
+### Steps to run the code to find r-robust s-clubs in Linux environment:
+1. Download or clone the repository to your machine.
+2. Go to the folder r_robust_s_club.
+3. Open the "Makefile" and set GUROBI_HOME to the directory of your Gurobi installation, e.g.: /opt/gurobi/9.0.1/linux64.
+4. From the terminal, go to the folder of r_robust_s_club.
+5. Type "make" and hit enter to compile. After successful complilation, type "./main" to run the code.
+
+
+## Terms and Use:
 
 MIT License
 
