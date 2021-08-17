@@ -3,7 +3,7 @@
 
 This code accompanies the paper "On fault-tolerant low-diameter clusters in graphs" and is written in C++. If you wish to use or cite this code, please cite the paper: 
 
-    @article{LSBB2021fault-tolerent, 
+    @article{LSBB2021fault-tolerant, 
       title={On fault-tolerant low-diameter clusters in graphs}, 
       author={Lu, Yajun and Salemi, Hosseinali and Balasundaram, Balabhaskar and Buchanan, Austin}, 
       year={2021}}
