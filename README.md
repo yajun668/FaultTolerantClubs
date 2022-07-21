@@ -16,10 +16,10 @@ This repository includes two folders:
 
 In this paper, we use the below graph instances as our testbed. For self-contained, we include all data sets in this repository (under the "data" folder of r-robust s-clubs/h-hereditary s-clubs), but the copyrights are credited to original authors of data sets.
 
-1. Gendreau instances used in [Veremyev and Boginski 2012](https://www.sciencedirect.com/science/article/pii/S0377221711009477)
-2. Watts-Strogatz (WS) instances used in [Veremyev et al. 2022](https://www.sciencedirect.com/science/article/pii/S0377221721004227)
-3. DIMACS-10 instances in [Bader et al. 2013](http://www.ams.org/books/conm/588/) are publicly available [here](https://www.cc.gatech.edu/dimacs10/archive/clustering.shtml)
-4. Other Real-Life (ORL) instances used in [Veremyev et al. 2022](https://www.sciencedirect.com/science/article/pii/S0377221721004227) are publicly available [here](https://sites.pitt.edu/~droleg/files/2-clubs.html) 
+1. Gendreau instances used in [Veremyev and Boginski 2012](https://www.sciencedirect.com/science/article/pii/S0377221711009477).
+2. Watts-Strogatz (WS) instances used in [Veremyev et al. 2022](https://www.sciencedirect.com/science/article/pii/S0377221721004227).
+3. DIMACS-10 instances in [Bader et al. 2013](http://www.ams.org/books/conm/588/) are publicly available [here](https://www.cc.gatech.edu/dimacs10/archive/clustering.shtml).
+4. Other Real-Life (ORL) instances used in [Veremyev et al. 2022](https://www.sciencedirect.com/science/article/pii/S0377221721004227) are publicly available [here](https://sites.pitt.edu/~droleg/files/2-clubs.html).
 
 ## Compiling the code
 The following steps show how to compile and run the code to find r-robust s-clubs in a Linux environment using a makefile (you can also run the code in Mac or Windows environment by configuring your IDE appropriately). In the folder of r_robust_s_club, parameter.txt is used to configure parameters r and s, and each graph instance's folder includes InputFile.txt (used to determine which instances you want to test). It is similar to run the code to find h-hereditary s-clubs.
@@ -33,6 +33,10 @@ The following steps show how to compile and run the code to find r-robust s-club
 5. Type "make" and hit enter to compile. After successful compilation, type "./main" to run the code.
 
 
+## Acknowledgments
+We would like to thank Alexander Veremyev for sharing Watts-Strogatz (WS) and Gendreau instances, and solvers for the maximum r-robust 2-club problem.
+
+
 ## Terms and Use:
 
 MIT License
@@ -44,6 +48,3 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-## Acknowledgments
-We would like to thank Alexander Veremyev for sharing Watts-Strogatz (WS) and Gendreau instances, and solvers for the maximum r-robust 2-club problem.
