@@ -1,0 +1,6 @@
+1. DIMACS-10 instances use the Metis format explained in greater detail at this link: https://www.cc.gatech.edu/dimacs10/downloads.shtml.
+
+2. All other instances use the edge list format. 
+
+ 1) The two numbers in the first correspond to #vertices and #edges of a graph in that order.
+ 2) Starting from the second row, each line beginning with the letter "e" represents an edge. For example, e 1 6 means the graph has an edge 1-6.
