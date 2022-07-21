@@ -3,20 +3,23 @@
 int main(int argc, const char * argv[]) {
     ifstream parameter_file("parameter.txt");// Parameters r and s are set up in this txt file
     string line;
-    vector<long> parameters;//parameters: 0: R; 1: S;
+    vector<string> parameters;// Instruction for parameters: 1st line: R; 2nd: S; 3rd: graph format-- 1 for DIMACS 10 and 2 for Edge list format; 4th: Instance folder name
+
     while (getline(parameter_file, line)){
         if (line[0]=='%')
             continue;
-        parameters.push_back(atol(line.c_str()));
+        parameters.push_back(line);
     }
     Model new_model;
 
     //change working directory
-    chdir("./data");
+    chdir("..");; //go back to parent folder
+    string wd = "./Dataset/"+parameters[3] + "/";
+    chdir(wd.c_str());
     new_model.read_masterfile("InputFile.txt");
-    cout<<"-------------Solving the maximum "<<itos(parameters[0]) + "-Robust " + itos(parameters[1]) + "-Club------------------"<<endl;
+    cout<<"-------------Solving the maximum "<<parameters[0] + "-Robust " + parameters[1] + "-Club------------------"<<endl;
     string outputfile;
-    outputfile=itos(parameters[0]) + "_Robust_" + itos(parameters[1]) + "_Club"+".csv"; // Result file
+    outputfile=parameters[0] + "_Robust_" + parameters[1] + "_Club"+".csv"; // Result file
     ofstream fout;
     fout.open(outputfile.c_str(), ios::out);
 
@@ -31,10 +34,22 @@ int main(int argc, const char * argv[]) {
         fout.open(outputfile.c_str(), ios::app);
         Graph inputG;
         inputG.graphname = new_model.filenames[i]; //i-th instance name
-        inputG.param_r = parameters[0];
-        inputG.param_s = parameters[1];
-        cout<< "Attempting to read DIMACS10 clustering format instance ...\n";
-        inputG.ReadDIMACS10cluster();//read graph file
+        inputG.param_r = atol(parameters[0].c_str());
+        inputG.param_s = atol(parameters[1].c_str());
+
+        if (atol(parameters[2].c_str()) == 1) {
+            cout << "Attempting to read DIMACS10 clustering format instance ...\n";
+            inputG.ReadDIMACS10cluster();//read graph file
+        }
+        else if(atol(parameters[2].c_str()) == 2) {
+            cout << "Attempting to read edge list format instance ...\n";
+            inputG.ReadVBgraph();//read graph file
+        }
+        else{
+            cout<<"Caution!!! Please enter 1 or 2 for the third line about graph format"<<endl;
+            return 0;
+        }
+
         fout<<inputG.graphname<<","<< inputG.nverts<<","<<inputG.nedges<<",";
         
         //Wal-clock time starts

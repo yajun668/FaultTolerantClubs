@@ -39,6 +39,61 @@ Graph::~Graph()
     blockList.clear();
 }
 
+//Reads Veremyev-Boginski instances in format |V| |E| linebreak e u_1 u_2 ...
+void Graph::ReadVBgraph()
+{
+    ifstream f_in(graphname.c_str());
+
+    f_in>>nverts;
+
+    vector <long> emptyv; //initialize AdjList
+    for (int i=0;i<nverts;i++)
+        AdjList.push_back( emptyv );
+
+
+    f_in>>nedges; //no. of edges reported
+
+    char discard; long Vrtx1,Vrtx2; //Baski 2/17/17; modified to not duplicate the last edge if #edges reported is wrong
+    int nedgesread=0; bool readnewline=true;
+    while (readnewline)
+    {
+        readnewline = false;
+        f_in>>discard;
+        f_in>>Vrtx1;
+        f_in>>Vrtx2;
+        if(discard == 'e')
+        {
+            AdjList[Vrtx1-1].push_back(Vrtx2-1);
+            AdjList[Vrtx2-1].push_back(Vrtx1-1);
+            discard='x';
+            readnewline=true;
+            nedgesread++; //counts no. of edges read
+        }
+    }
+
+    density = (double)(2*nedges)/(nverts*(nverts-1));
+
+    cout<<"\n"<<graphname<<"\t"<<"Vertices = "<<nverts<<"\t"<<"Edges expected = "<<nedges;
+    cout<<"\t Edges read = "<<nedgesread<<"\t"<<"Density = "<<density<<endl<<endl;
+
+    if(nedgesread!=nedges)
+    {
+        cout<<"\n Caution :: Edges read does not match edges expected; only the edges read are used. \n";
+        nedges=nedgesread;
+    }
+
+    for(int j=0;j<nverts;j++)
+        sort(AdjList[j].begin(),AdjList[j].end());
+
+
+    degree.clear();
+    for(int j=0;j<nverts;j++)
+        degree.push_back( AdjList[j].size() );
+
+}
+
+
+
 //Reads DIMACS 10th clustering challenge instances
 //CAUTION: assumes the remaining lines are either comments starting %, blank for isolated vertices,
 //CAUTION:  or list of neighbors for vertices with degree >= 1. No other possibilities. Comments can be anywhere.

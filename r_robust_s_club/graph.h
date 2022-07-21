@@ -13,7 +13,7 @@
 #include <stack>
 #include <limits.h>
 #include <chrono>
-//#include "omp.h" //uncomment when running on cowboy cluster in order to use OpenMP for parallel computing
+#include "omp.h" //uncomment when running on cowboy cluster in order to use OpenMP for parallel computing
 using namespace std;
 typedef chrono::high_resolution_clock::time_point chrono_time_point;
 typedef chrono::high_resolution_clock chrono_clock;
@@ -38,7 +38,7 @@ public:
     Graph(long n);
     void clear();
     ~Graph();
-
+    void ReadVBgraph();
     void ReadDIMACS10cluster(); //read graph
     void FindkNbrs(long); //pass parameter k in argument to find the distance k neighborhood
     vector<long> kBFS(long s, long k); //first argument is the starting vertex s; pass level k in 2nd argument to do BFS up to level k

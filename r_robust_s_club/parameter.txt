@@ -1,3 +1,5 @@
-%Instruction for parameters: 1st line: R; 2nd: S;
+%Instruction for parameters: 1st line: R; 2nd: S; 3rd: graph format-- 1 for DIMACS 10 and 2 for Edge list format; 4th: Instance folder name
 3
 3
+1
+DIMACS10

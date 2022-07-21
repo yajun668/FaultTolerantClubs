@@ -30,11 +30,10 @@ The following steps show how to compile and run the code to find r-robust s-club
 
 ### Steps to run the code to find r-robust s-clubs in Linux environment:
 1. Download or clone the repository to your machine.
-2. Move all files in a specific graph instance folder (e.g., "DIMACS10" folder if running DIMACS-10 instances) to the folder "r-robust s-clubs/data".
-3. Go to the folder "r_robust_s_club", open the "Makefile" and set GUROBI_HOME to the directory of your Gurobi installation, e.g.: /opt/gurobi/9.0.1/linux64.
-4. From the terminal, go to the folder of "r_robust_s_club".
-5. Type "make" and hit enter to compile. 
-6. Type "./main" to run the code.
+2. Go to the folder "r_robust_s_club", open the "Makefile" and set GUROBI_HOME to the directory of your Gurobi installation, e.g.: /opt/gurobi/9.0.1/linux64.
+3. From the terminal, go to the folder of "r_robust_s_club".
+4. Type "make" and hit enter to compile. 
+5. Type "./main" to run the code.
 
 
 ## Acknowledgments
