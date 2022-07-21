@@ -1,13 +1,0 @@
-karate.graph
-dolphins.graph
-lesmis.graph
-polbooks.graph
-adjnoun.graph
-football.graph
-jazz.graphcelegans_metabolic.graph
-email.graphpolblogs.graph
-netscience.graph
-power.graph
-hep-th.graph
-PGPgiantcompo.graph
-
