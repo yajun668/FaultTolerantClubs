@@ -4,14 +4,14 @@
 This code accompanies the paper "[On fault-tolerant low-diameter clusters in graphs](https://pubsonline.informs.org/doi/10.1287/ijoc.2022.1231)" and is written in C++. If you wish to use or cite this code, please cite the paper: 
 
     @article{LSBB2022fault-tolerant, 
-  	title = {On fault-tolerant low-diameter clusters in graphs}, 
-  	author = {Lu, Yajun and Salemi, Hosseinali and Balasundaram, Balabhaskar and Buchanan, Austin}, 
-	journal = {INFORMS Journal on Computing},
-        pages = {3181-3199},
-        volume = {34}, 
-	number = {6},
-        year = {2022},
-        doi = {https://doi.org/10.1287/ijoc.2022.1231},
+		title = {On fault-tolerant low-diameter clusters in graphs}, 
+		author = {Lu, Yajun and Salemi, Hosseinali and Balasundaram, Balabhaskar and Buchanan, Austin}, 
+		journal = {INFORMS Journal on Computing},
+		pages = {3181-3199},
+		volume = {34}, 
+		number = {6},
+		year = {2022},
+		doi = {https://doi.org/10.1287/ijoc.2022.1231},
 	}
 
 This repository includes:
